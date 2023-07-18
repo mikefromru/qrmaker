@@ -5,6 +5,7 @@ from kivy.uix.filechooser import FileChooser
 
 import logging
 import os
+import glob
 
 # 3d
 import qrcode
@@ -23,11 +24,15 @@ class App(MDApp):
 
     def on_start(self):
         logging.info('Start app...')
-        if not os.path.exists('qcodes'):
-            os.mkdir('qcodes')
+        if not os.path.exists('qrcodes'):
+            os.mkdir('qrcodes')
+        else:
+            for x in glob.glob('qrcodes/*'):
+                os.remove(x)
+            logging.info('Cleaned')
 
     def create_qrcode(self):
-        logging.info('click button')
+        logging.info('Created ...')
         self.n += 1
 
         user_input = self.root.ids.text_field.text
@@ -39,7 +44,7 @@ class App(MDApp):
             border=4,
         )
         
-        filename = f'qcodes/{str(self.n)}.png'
+        filename = f'qrcodes/{str(self.n)}.png'
 
         qr.add_data(user_input)
         qr.make(fit=True)
@@ -57,9 +62,3 @@ class App(MDApp):
 
 if __name__ == '__main__':
     App().run()
-
-#self.root.remove_widget(self.root.ids.result)
-#self.root.add_widget(self.root.ids.result)
-#self.root.remove_widget(self.root.ids.my_card)
-
-
